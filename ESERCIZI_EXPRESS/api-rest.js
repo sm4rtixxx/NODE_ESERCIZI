@@ -96,15 +96,44 @@ app.put('/libri/:id', (req, res) => {
     autore: autore,
     anno: +anno
   };
+  console.log(libri);
+  res.status(200).json(libri[indice]);
+});
+
+//PATCH /libri/:id modifica un libro esistente in base alle proprietà passate
+app.patch('/libri/:id', function (req, res) {
+  // Riceve l'id del libro da modificare nell'URL.
+  const id = +req.params.id;
+  const indice = libri.findIndex(function (libro) {
+    return libro.id === id;
+  });
+
+  if (indice === -1) {
+    return res.status(404).json({errore: `Libro (id: ${id}) non trovato. Impossibile aggiornare`});
+  }
+
+  libri[indice] = {
+    id: id,
+    titolo: req.body.titolo || libri[indice].titolo,
+    autore: req.body.autore || libri[indice].autore,
+    anno: req.body.anno ? +req.body.anno : libri[indice].anno
+  };
+
+  console.log(libri);
   res.status(200).json(libri[indice]);
 });
 
 //DELETE (/libri/:id) -cancella il libro dato l'id
 app.delete('/libri/:id', (req, res) => {
+  const id = req.params.id;
   const indice = libri.findIndex(libro => libro.id == id);
   if (indice == -1) {
     res.status(404).json({errore: `Libro (id: ${id}) non trovato. Impossibile eliminare`});
   }
+  const libroEliminato = libri[indice];
+  libri.splice(indice, 1);
+  console.log(libri);
+  res.status(200).json({messaggio: 'libro eliminato con successo', libro: libroEliminato});
 });
 
 //AVVIO DEL SERVER

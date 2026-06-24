@@ -45,7 +45,7 @@ app.get('/libri', (req, res) => {
 app.get('/libri/:id', (req, res) => {
   const libro = libri.find(libro => libro.id == +req.params.id);
   if (!libro) {
-    return res.status(404).json({errore: `Libro (id: ${req.params.id}) non trovato`});
+    res.status(404).json({errore: `Libro (id: ${req.params.id}) non trovato`});
   }
   res.json(libro);
 });
@@ -53,7 +53,7 @@ app.get('/libri/:id', (req, res) => {
 app.get('/libri/:id/autore', (req, res) => {
   const libro = libri.find(libro => libro.id == +req.params.id);
   if (!libro) {
-    return res.status(404).json({errore: `Libro (id: ${req.params.id}) non trovato`});
+    res.status(404).json({errore: `Libro (id: ${req.params.id}) non trovato`});
   }
   res.json({autore: libro.autore});
 });
